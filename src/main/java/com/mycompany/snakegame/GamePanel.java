@@ -4,22 +4,22 @@ import java.awt.*; // Importing classes for graphics and colors for GUI componen
 import java.awt.event.*; // Importing AWT event listeners (classes) for handling events like key presses
 import javax.swing.JPanel; // Importing JPanel class for creating a panel
 import javax.swing.Timer; // Importing Timer class for scheduling tasks (creating a game loop)
+import javax.swing.JOptionPane; // Importing JOptionPane for displaying dialog boxes, such as the difficulty selection menu
 import java.util.Random; // Importing Random class for generating random numbers
 
 public final class GamePanel extends JPanel implements ActionListener { // GamePanel class extending JPanel and implementing ActionListener
-// Game constants
+    // Game constants
     static final int SCREEN_WIDTH = 600; // Constant for Width of the game screen
     static final int SCREEN_HEIGHT = 600; // Constant for Height of the game screen
     static final int UNIT_SIZE = 13; // Size of the game objects (like the snake and apple)
     static final int GAME_UNITS = (SCREEN_WIDTH * SCREEN_HEIGHT) / UNIT_SIZE; // Total number of possible units on the screen
-    static int DELAY = 150; // Delay between game updates (milliseconds)
-  
-    
-// Arrays to hold the coordinates of the snake's parts
+    static int DELAY; // Delay between game updates (milliseconds)
+
+    // Arrays to hold the coordinates of the snake's parts
     final int[] x = new int[GAME_UNITS]; // Array to store x-coordinates of the snake's body parts
     final int[] y = new int[GAME_UNITS]; // Array to store y-coordinates of the snake's body parts
 
-// Game variables
+    // Game variables
     int bodyParts = 6; // Initial number of body parts of the snake
     int applesEaten; // Count of the apples eaten by the snake
     int appleX; // X-coordinate of the apple
@@ -29,18 +29,42 @@ public final class GamePanel extends JPanel implements ActionListener { // GameP
     Timer timer; // Timer object to for game loop
     Random random; // Random number generator for placing the apple
 
-
-// Constructor
+    // Constructor
     GamePanel() {
         random = new Random(); // Initializing the random object
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT)); // Setting the size of the panel
         this.setBackground(Color.black); // Setting the background color of the panel
         this.setFocusable(true); // Making sure the panel can be focused to receive key events
         this.addKeyListener(new MyKeyAdapter()); // Adding a key listener to capture key presses
+        selectDifficulty(); // Method to select game difficulty
+        timer = new Timer(DELAY, this); // Setting up the timer with delay and action listener
+        timer.start(); // Starting the timer
         startGame(); // Calling the method to start the game
-        this.requestFocusInWindow(); // Requesting focus to ensure key input is received
-       
-     }
+    }
+
+    // Method to select game difficulty and set DELAY
+    private void selectDifficulty() {
+        String[] options = {"Easy", "Medium", "Hard"};
+        int choice = JOptionPane.showOptionDialog(null, "Select Difficulty", 
+                "Difficulty Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, 
+                null, options, options[0]);
+        
+
+        switch(choice) {
+            case 0: // Easy
+                DELAY = 250;
+                break;
+            case 1: // Medium
+                DELAY = 180;
+                break;
+            case 2: // Hard
+                DELAY = 100;
+                break;
+            default: // Default to Exit if no selection
+                System.exit(0);
+                break;
+        }
+    }
 
 // Method to start the game
     public void startGame() {
@@ -62,11 +86,11 @@ public final class GamePanel extends JPanel implements ActionListener { // GameP
         if (running) { // Check if the game is currently running
 
 //Drawing logic grid
-//
-//            for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) { // Loop to draw grid lines vertically and horizontally
-//                 g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT); // Draw vertical lines of the grid
-//                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE); // Draw horizontal lines of the grid
-//       }
+
+            for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) { // Loop to draw grid lines vertically and horizontally
+                 g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT); // Draw vertical lines of the grid
+                 g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE); // Draw horizontal lines of the grid
+       }
 
 // Drawing the apple
         g.setColor(Color.red); // Set the color for drawing the apple
@@ -122,8 +146,8 @@ public final class GamePanel extends JPanel implements ActionListener { // GameP
              applesEaten++; // Increments the number of apples eaten
              newApple(); // Generates a new apple
              
-            if (DELAY > 60) { // Check to prevent delay from becoming too small
-            DELAY -= 5; // Decrease delay to increase speed
+            if (DELAY > 70) { // Check to prevent delay from becoming too small
+            DELAY -= 10; // Decrease delay to increase speed
             timer.stop(); // Stop current timer
             timer = new Timer(DELAY, this); // Create new timer with decreased delay
             timer.start(); // Start new timer
