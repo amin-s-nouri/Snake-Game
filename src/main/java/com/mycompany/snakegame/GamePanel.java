@@ -1,7 +1,14 @@
 package com.mycompany.snakegame; 
 
-import java.awt.*; // Importing classes for graphics and colors for GUI components
-import java.awt.event.*; // Importing AWT event listeners (classes) for handling events like key presses
+import java.awt.Color; // Library for using color properties in GUI components.
+import java.awt.Dimension; // Library for specifying dimensions for GUI components.
+import java.awt.Font; // Library for setting font properties for text in GUI components.
+import java.awt.FontMetrics; // Library for obtaining font measurement information.
+import java.awt.Graphics; // Library for basic rendering operations in a Java GUI.
+import java.awt.event.ActionEvent; // Library for handling action events like button clicks.
+import java.awt.event.ActionListener; // Library for receiving action events.
+import java.awt.event.KeyAdapter; // Library for creating a key event adapter.
+import java.awt.event.KeyEvent; // Library for key event constants.
 import javax.swing.JPanel; // Importing JPanel class for creating a panel
 import javax.swing.Timer; // Importing Timer class for scheduling tasks (creating a game loop)
 import javax.swing.JOptionPane; // Importing JOptionPane for displaying dialog boxes, such as the difficulty selection menu
